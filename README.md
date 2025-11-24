@@ -80,6 +80,33 @@ src/
 └── App.tsx             # 메인 앱 컴포넌트
 ```
 
+## 🌐 배포하기 (Vercel)
+
+### 1. Vercel 계정 연동
+
+1. https://vercel.com 방문 및 GitHub으로 로그인
+2. "Add New Project" 클릭
+3. GitHub repository 선택: `ukuku360/Mood_Recorder`
+4. "Import" 클릭
+
+### 2. 환경 변수 설정
+
+프로젝트 설정에서 Environment Variables 추가:
+
+```
+VITE_ANTHROPIC_API_KEY=your_anthropic_api_key_here
+```
+
+### 3. 배포
+
+"Deploy" 버튼 클릭하면 자동으로 빌드 및 배포됩니다.
+
+배포 후 고유 URL (예: `https://mood-recorder.vercel.app`)로 접속 가능합니다.
+
+### 자동 재배포
+
+GitHub의 `main` 브랜치에 push하면 Vercel이 자동으로 재배포합니다.
+
 ## 🎯 향후 개발 아이디어
 
 - [ ] 녹음 및 다운로드 기능
