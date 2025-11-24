@@ -1,0 +1,171 @@
+.keyboard-player {
+  width: 100%;
+  max-width: 850px;
+  padding: 2.5rem;
+  background: var(--bg-primary);
+  border-radius: 28px;
+  box-shadow: var(--shadow-neumorphic);
+}
+
+.keyboard-player.inactive {
+  padding: 3rem 2rem;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-neumorphic);
+}
+
+.keyboard-player.inactive p {
+  font-size: 1.1rem;
+  color: var(--text-tertiary);
+}
+
+.player-header {
+  margin-bottom: 2.5rem;
+  text-align: center;
+}
+
+.player-header h2 {
+  margin-bottom: 0.8rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.player-header p {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.keyboard-guide {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-bottom: 2.5rem;
+}
+
+.key-row {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.key-row > span {
+  width: 70px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-align: left;
+  letter-spacing: 0.02em;
+}
+
+.keys {
+  flex: 1;
+  display: flex;
+  gap: 0.6rem;
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 0.8rem 1.5rem;
+  background: var(--bg-primary);
+  border-radius: 14px;
+  box-shadow: var(--shadow-inset);
+  color: var(--text-secondary);
+  justify-content: center;
+}
+
+.notes-display {
+  margin-top: 2.5rem;
+  padding: 1.5rem;
+  background: var(--bg-primary);
+  border-radius: 16px;
+  box-shadow: var(--shadow-inset);
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.notes-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  letter-spacing: 0.02em;
+}
+
+.notes {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  flex: 1;
+}
+
+.note {
+  padding: 0.4rem 1rem;
+  background: var(--bg-primary);
+  border-radius: 10px;
+  box-shadow: var(--shadow-neumorphic);
+  font-family: 'SF Mono', 'Courier New', monospace;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  letter-spacing: 0.05em;
+}
+
+@media (max-width: 768px) {
+  .keyboard-player {
+    padding: 2rem;
+    max-width: 100%;
+  }
+
+  .keyboard-player.inactive {
+    padding: 2rem;
+  }
+
+  .player-header h2 {
+    font-size: 1.4rem;
+  }
+
+  .player-header p {
+    font-size: 0.9rem;
+  }
+
+  .keyboard-guide {
+    gap: 1rem;
+  }
+
+  .key-row {
+    gap: 1rem;
+  }
+
+  .key-row > span {
+    width: 50px;
+    font-size: 0.75rem;
+  }
+
+  .keys {
+    padding: 0.6rem 1rem;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    gap: 0.4rem;
+  }
+
+  .notes-display {
+    padding: 1.2rem;
+    gap: 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .notes {
+    width: 100%;
+    gap: 0.5rem;
+  }
+
+  .note {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.8rem;
+  }
+}

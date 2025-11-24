@@ -1,0 +1,65 @@
+:root {
+  /* Neumorphic Color Palette - Monochrome */
+  --bg-primary: #e0e5ec;
+  --bg-secondary: #ecf0f3;
+  --text-primary: #4a5568;
+  --text-secondary: #718096;
+  --text-tertiary: #a0aec0;
+  --accent: #8b9dc3;
+
+  /* Neumorphic Shadows */
+  --shadow-light: #ffffff;
+  --shadow-dark: #a3b1c6;
+  --shadow-neumorphic: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+  --shadow-inset: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
+  --shadow-pressed: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+
+  font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+#root {
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-tertiary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
