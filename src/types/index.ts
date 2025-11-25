@@ -47,3 +47,20 @@ export interface KeyboardNote {
   timestamp: number
   pitch: string // Musical note like 'C4', 'D4', etc.
 }
+
+// Note event for sequencer
+export interface NoteEvent {
+  note: string
+  duration: string
+  time: number
+  velocity: number
+}
+
+// Recording data
+export interface RecordingData {
+  id: string
+  blob: Blob
+  duration: number
+  timestamp: Date
+  moodSnapshot: MoodAnalysis
+}

@@ -1,0 +1,246 @@
+.auto-composer {
+  padding: 1.5rem;
+  background: var(--bg-primary);
+  border-radius: 24px;
+  box-shadow: var(--shadow-neumorphic);
+  transition: var(--theme-transition);
+}
+
+.composer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.composer-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.current-note {
+  padding: 0.3rem 0.8rem;
+  background: var(--accent);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  font-family: 'SF Mono', Monaco, monospace;
+  animation: noteFlash 0.2s ease;
+}
+
+@keyframes noteFlash {
+  0% { transform: scale(1.2); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.composer-modes {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.mode-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.6rem 0.4rem;
+  background: var(--bg-primary);
+  border: none;
+  border-radius: 12px;
+  box-shadow: 5px 5px 10px var(--shadow-dark),
+              -5px -5px 10px var(--shadow-light);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.mode-button:hover {
+  transform: translateY(-1px);
+}
+
+.mode-button:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.mode-button.active {
+  box-shadow: var(--shadow-inset);
+  background: var(--bg-secondary);
+}
+
+.mode-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+}
+
+.mode-label {
+  font-size: 0.65rem;
+  font-weight: 500;
+  color: var(--text-tertiary);
+  transition: var(--theme-transition);
+}
+
+.mode-button.active .mode-label {
+  color: var(--text-primary);
+}
+
+.composer-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.play-button {
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-neumorphic);
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  color: var(--text-primary);
+}
+
+.play-button:hover {
+  transform: scale(1.05);
+  box-shadow: 12px 12px 20px var(--shadow-dark),
+              -12px -12px 20px var(--shadow-light);
+}
+
+.play-button:active {
+  transform: scale(0.98);
+  box-shadow: var(--shadow-pressed);
+}
+
+.play-button.playing {
+  box-shadow: var(--shadow-inset);
+  animation: playingPulse 2s infinite;
+}
+
+@keyframes playingPulse {
+  0%, 100% { box-shadow: var(--shadow-inset); }
+  50% { box-shadow: var(--shadow-inset), 0 0 15px rgba(139, 157, 195, 0.3); }
+}
+
+.regenerate-button,
+.loop-button {
+  width: 44px;
+  height: 44px;
+  border: none;
+  border-radius: 50%;
+  background: var(--bg-primary);
+  box-shadow: 6px 6px 12px var(--shadow-dark),
+              -6px -6px 12px var(--shadow-light);
+  cursor: pointer;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.regenerate-button:hover,
+.loop-button:hover {
+  transform: translateY(-2px);
+}
+
+.regenerate-button:active,
+.loop-button:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.loop-button.active {
+  box-shadow: var(--shadow-inset);
+  background: var(--bg-secondary);
+}
+
+.bars-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.bars-control label {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+}
+
+.bars-control select {
+  padding: 0.4rem 0.6rem;
+  border: none;
+  border-radius: 8px;
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-inset);
+  color: var(--text-primary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: var(--theme-transition);
+}
+
+.bars-control select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.composer-info {
+  text-align: center;
+}
+
+.tempo-display {
+  font-size: 0.8rem;
+  color: var(--text-tertiary);
+  font-family: 'SF Mono', Monaco, monospace;
+  transition: var(--theme-transition);
+}
+
+@media (max-width: 768px) {
+  .auto-composer {
+    padding: 1rem;
+    border-radius: 20px;
+  }
+
+  .composer-modes {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.4rem;
+  }
+
+  .mode-button {
+    padding: 0.5rem 0.3rem;
+    border-radius: 10px;
+  }
+
+  .mode-icon {
+    font-size: 1rem;
+  }
+
+  .mode-label {
+    font-size: 0.6rem;
+  }
+
+  .play-button {
+    width: 48px;
+    height: 48px;
+    font-size: 1.3rem;
+  }
+
+  .regenerate-button,
+  .loop-button {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  .composer-controls {
+    gap: 0.75rem;
+  }
+}

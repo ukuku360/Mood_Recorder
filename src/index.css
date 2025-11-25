@@ -1,5 +1,5 @@
 :root {
-  /* Neumorphic Color Palette - Monochrome */
+  /* Neumorphic Color Palette - Light Theme */
   --bg-primary: #e0e5ec;
   --bg-secondary: #ecf0f3;
   --text-primary: #4a5568;
@@ -7,12 +7,18 @@
   --text-tertiary: #a0aec0;
   --accent: #8b9dc3;
 
-  /* Neumorphic Shadows */
+  /* Neumorphic Shadows - Light */
   --shadow-light: #ffffff;
   --shadow-dark: #a3b1c6;
   --shadow-neumorphic: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
   --shadow-inset: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
   --shadow-pressed: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
+
+  /* Theme transition */
+  --theme-transition: background-color 0.4s ease,
+                      color 0.4s ease,
+                      box-shadow 0.4s ease,
+                      border-color 0.4s ease;
 
   font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
   line-height: 1.6;
@@ -22,6 +28,24 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Dark Theme */
+[data-theme="dark"] {
+  /* Neumorphic Color Palette - Dark */
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --text-primary: #eef1f6;
+  --text-secondary: #b8c1d1;
+  --text-tertiary: #6b7a99;
+  --accent: #7f8fa6;
+
+  /* Neumorphic Shadows - Dark */
+  --shadow-light: #242444;
+  --shadow-dark: #121220;
+  --shadow-neumorphic: 9px 9px 16px var(--shadow-dark), -9px -9px 16px var(--shadow-light);
+  --shadow-inset: inset 6px 6px 10px var(--shadow-dark), inset -6px -6px 10px var(--shadow-light);
+  --shadow-pressed: inset 4px 4px 8px var(--shadow-dark), inset -4px -4px 8px var(--shadow-light);
 }
 
 * {
@@ -38,6 +62,7 @@ body {
   min-height: 100vh;
   background: var(--bg-primary);
   color: var(--text-primary);
+  transition: var(--theme-transition);
 }
 
 #root {

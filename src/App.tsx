@@ -2,7 +2,15 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import MoodInput from './components/MoodInput'
 import AudioVisualizer from './components/AudioVisualizer'
+import RealTimeVisualizer from './components/RealTimeVisualizer'
 import KeyboardPlayer from './components/KeyboardPlayer'
+import InstrumentSelector from './components/InstrumentSelector'
+import RecordingControls from './components/RecordingControls'
+import AutoComposer from './components/AutoComposer'
+import ThemeToggle from './components/ThemeToggle'
+import type { InstrumentType } from './services/instruments'
+import type { AudioParameters } from './types'
+import { useTheme } from './hooks/useTheme'
 import { analyzeMood } from './services/llmService'
 import { mapMoodToAudio } from './services/moodMapper'
 import { audioEngine } from './services/audioEngine'
@@ -11,8 +19,11 @@ import type { MoodAnalysis } from './types'
 
 function App() {
   const [currentMood, setCurrentMood] = useState<MoodAnalysis | null>(null)
+  const [audioParams, setAudioParams] = useState<AudioParameters | null>(null)
   const [isAnalyzing, setIsAnalyzing] = useState(false)
   const [isAudioInitialized, setIsAudioInitialized] = useState(false)
+  const [currentInstrument, setCurrentInstrument] = useState<InstrumentType>('piano')
+  const { theme, toggleTheme } = useTheme()
 
   useEffect(() => {
     return () => {
@@ -51,10 +62,11 @@ function App() {
       }
 
       // Map mood to audio parameters
-      const audioParams = mapMoodToAudio(mood)
+      const params = mapMoodToAudio(mood)
+      setAudioParams(params)
 
       // Update audio engine with new parameters
-      audioEngine.updateParameters(audioParams)
+      audioEngine.updateParameters(params)
     } catch (error) {
       console.error('Error analyzing mood:', error)
       alert('기분 분석 중 오류가 발생했습니다.')
@@ -65,12 +77,27 @@ function App() {
 
   const handleResetMood = () => {
     setCurrentMood(null)
+    setAudioParams(null)
     // Scroll to top smoothly
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleInstrumentChange = async (instrument: InstrumentType) => {
+    setCurrentInstrument(instrument)
+    await audioEngine.setInstrument(instrument)
+
+    // Re-apply mood parameters with new instrument
+    if (currentMood) {
+      const params = mapMoodToAudio(currentMood)
+      setAudioParams(params)
+      audioEngine.updateParameters(params)
+    }
+  }
+
   return (
     <div className="app">
+      <ThemeToggle theme={theme} onToggle={toggleTheme} />
+
       <header className="app-header">
         <h1>🎹 Mood Recorder</h1>
         <p>기분을 입력하고 키보드로 연주하세요</p>
@@ -82,9 +109,16 @@ function App() {
           isAnalyzing={isAnalyzing}
         />
 
-        {currentMood ? (
+        {currentMood && audioParams ? (
           <>
+            <RealTimeVisualizer mood={currentMood} isActive={true} />
             <AudioVisualizer mood={currentMood} onReset={handleResetMood} />
+            <AutoComposer mood={currentMood} audioParams={audioParams} />
+            <InstrumentSelector
+              currentInstrument={currentInstrument}
+              onInstrumentChange={handleInstrumentChange}
+            />
+            <RecordingControls />
             <KeyboardPlayer isActive={true} />
           </>
         ) : !isAnalyzing ? (

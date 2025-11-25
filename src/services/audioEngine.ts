@@ -1,8 +1,13 @@
 import * as Tone from 'tone'
 import type { AudioParameters } from '../types'
+import { audioAnalyzer } from './audioAnalyzer'
+import { audioRecorder } from './audioRecorder'
+import { INSTRUMENTS, type InstrumentType } from './instruments'
+
+type SynthType = Tone.PolySynth | Tone.MonoSynth
 
 class AudioEngine {
-  private synth: Tone.PolySynth | null = null
+  private synth: SynthType | null = null
   private reverb: Tone.Reverb | null = null
   private filter: Tone.Filter | null = null
   private chorus: Tone.Chorus | null = null
@@ -11,6 +16,7 @@ class AudioEngine {
   private initialized = false
   private currentScale: string[] = []
   private currentChordIntervals: number[] = []
+  private currentInstrument: InstrumentType = 'piano'
 
   async initialize() {
     if (this.initialized) return
@@ -65,14 +71,28 @@ class AudioEngine {
     // Generate reverb impulse response (required for reverb to work)
     await this.reverb.generate()
 
+    // Initialize audio analyzer
+    audioAnalyzer.initialize()
+
     // Connect the audio chain:
     // Synth → Vibrato → Filter → Chorus → Distortion → Reverb → Output
+    // Also connect Distortion → Analyzer for visualization
     this.synth.connect(this.vibrato)
     this.vibrato.connect(this.filter)
     this.filter.connect(this.chorus)
     this.chorus.connect(this.distortion)
     this.distortion.connect(this.reverb)
     this.reverb.toDestination()
+
+    // Connect analyzer after distortion for visualization
+    audioAnalyzer.connect(this.distortion)
+
+    // Initialize audio recorder and connect reverb output
+    await audioRecorder.initialize()
+    const recorderDest = audioRecorder.getDestination()
+    if (recorderDest) {
+      this.reverb.connect(recorderDest)
+    }
 
     await Tone.start()
 
@@ -226,7 +246,13 @@ class AudioEngine {
         // Generate and play full chord with bass
         const chordNotes = this.getChordNotes(noteIndex)
         console.log('Playing chord:', chordNotes)
-        this.synth.triggerAttackRelease(chordNotes, duration)
+        // PolySynth accepts array of notes, MonoSynth doesn't
+        if ('releaseAll' in this.synth) {
+          this.synth.triggerAttackRelease(chordNotes, duration)
+        } else {
+          // For MonoSynth, play only the root note
+          this.synth.triggerAttackRelease(note, duration)
+        }
       }
       return true
     } catch (error) {
@@ -274,8 +300,56 @@ class AudioEngine {
 
   stop() {
     if (this.synth) {
-      this.synth.releaseAll()
+      // releaseAll is only available on PolySynth
+      if ('releaseAll' in this.synth) {
+        this.synth.releaseAll()
+      } else {
+        // For MonoSynth, trigger release manually
+        this.synth.triggerRelease()
+      }
     }
+  }
+
+  // Change instrument
+  async setInstrument(instrument: InstrumentType) {
+    if (!this.initialized || !this.vibrato) return
+
+    const config = INSTRUMENTS[instrument]
+
+    // Dispose old synth
+    if (this.synth) {
+      this.synth.disconnect()
+      this.synth.dispose()
+    }
+
+    // Create new synth based on instrument type
+    switch (config.synthType) {
+      case 'FMSynth':
+        this.synth = new Tone.PolySynth(Tone.FMSynth, config.synthConfig as Partial<Tone.FMSynthOptions>)
+        break
+      case 'AMSynth':
+        this.synth = new Tone.PolySynth(Tone.AMSynth, config.synthConfig as Partial<Tone.AMSynthOptions>)
+        break
+      case 'MonoSynth':
+        this.synth = new Tone.MonoSynth(config.synthConfig as Partial<Tone.MonoSynthOptions>)
+        break
+      default:
+        this.synth = new Tone.PolySynth(Tone.Synth, config.synthConfig as Partial<Tone.SynthOptions>)
+    }
+
+    // Reconnect to effects chain
+    this.synth.connect(this.vibrato)
+
+    this.currentInstrument = instrument
+    console.log(`Instrument changed to: ${config.name}`)
+  }
+
+  getCurrentInstrument(): InstrumentType {
+    return this.currentInstrument
+  }
+
+  getInstrumentEffectsPreset() {
+    return INSTRUMENTS[this.currentInstrument].effectsPreset
   }
 
   dispose() {
