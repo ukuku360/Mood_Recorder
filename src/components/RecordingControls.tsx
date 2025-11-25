@@ -13,7 +13,7 @@ export default function RecordingControls({ onRecordingComplete }: RecordingCont
   const [playbackUrl, setPlaybackUrl] = useState<string | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
   const audioRef = useRef<HTMLAudioElement | null>(null)
-  const intervalRef = useRef<NodeJS.Timeout | null>(null)
+  const intervalRef = useRef<number | null>(null)
 
   // Format duration as MM:SS
   const formatDuration = (ms: number): string => {
@@ -28,8 +28,8 @@ export default function RecordingControls({ onRecordingComplete }: RecordingCont
     if (isRecording) {
       // Stop recording
       const blob = await audioRecorder.stop()
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current)
       }
 
       if (blob && blob.size > 0) {
@@ -53,7 +53,7 @@ export default function RecordingControls({ onRecordingComplete }: RecordingCont
       if (started) {
         setIsRecording(true)
         // Update duration every 100ms
-        intervalRef.current = setInterval(() => {
+        intervalRef.current = window.setInterval(() => {
           setDuration(audioRecorder.getRecordingDuration())
         }, 100)
       }
@@ -96,8 +96,8 @@ export default function RecordingControls({ onRecordingComplete }: RecordingCont
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (intervalRef.current) {
-        clearInterval(intervalRef.current)
+      if (intervalRef.current !== null) {
+        window.clearInterval(intervalRef.current)
       }
       if (playbackUrl) {
         audioRecorder.revokePlaybackUrl(playbackUrl)
