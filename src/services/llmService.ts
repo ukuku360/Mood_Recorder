@@ -3,6 +3,17 @@ import type { MoodAnalysis, MoodType } from '../types'
 
 const OPENAI_API_KEY = import.meta.env.VITE_OPENAI_API_KEY
 
+const VALID_MOODS: MoodType[] = ['happy', 'sad', 'calm', 'energetic', 'angry']
+
+function isValidMoodType(mood: unknown): mood is MoodType {
+  return typeof mood === 'string' && VALID_MOODS.includes(mood as MoodType)
+}
+
+function clampValue(value: unknown, fallback: number): number {
+  if (typeof value !== 'number' || isNaN(value)) return fallback
+  return Math.max(0, Math.min(1, value))
+}
+
 export async function analyzeMood(userInput: string): Promise<MoodAnalysis> {
   if (!OPENAI_API_KEY) {
     console.warn('No API key found, using mock mood analysis')
@@ -56,13 +67,16 @@ Return ONLY the JSON, no additional text.`
     const content = response.data.choices[0].message.content
     const moodData = JSON.parse(content.trim())
 
+    // Validate mood type, fallback to 'calm' if invalid
+    const validatedMood = isValidMoodType(moodData.mood) ? moodData.mood : 'calm'
+
     return {
-      mood: moodData.mood as MoodType,
-      intensity: Math.max(0, Math.min(1, moodData.intensity)),
-      brightness: Math.max(0, Math.min(1, moodData.brightness)),
-      speed: Math.max(0, Math.min(1, moodData.speed)),
-      texture: Math.max(0, Math.min(1, moodData.texture)),
-      tension: Math.max(0, Math.min(1, moodData.tension))
+      mood: validatedMood,
+      intensity: clampValue(moodData.intensity, 0.5),
+      brightness: clampValue(moodData.brightness, 0.5),
+      speed: clampValue(moodData.speed, 0.5),
+      texture: clampValue(moodData.texture, 0.5),
+      tension: clampValue(moodData.tension, 0.3)
     }
   } catch (error) {
     console.error('Error analyzing mood with LLM:', error)

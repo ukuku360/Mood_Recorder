@@ -94,7 +94,7 @@ src/
 프로젝트 설정에서 Environment Variables 추가:
 
 ```
-VITE_ANTHROPIC_API_KEY=your_anthropic_api_key_here
+VITE_OPENAI_API_KEY=your_openai_api_key_here
 ```
 
 ### 3. 배포

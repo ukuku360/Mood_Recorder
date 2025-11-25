@@ -38,8 +38,16 @@ export default function KeyboardPlayer({ isActive }: KeyboardPlayerProps) {
 
         console.log('▶️  Playing note:', note)
         // Play note asynchronously to ensure AudioContext is resumed
-        await audioEngine.playNote(note, '8n')
-        console.log('✅ Note played successfully')
+        try {
+          const success = await audioEngine.playNote(note, '8n')
+          if (success) {
+            console.log('✅ Note played successfully')
+          } else {
+            console.warn('⚠️  Note playback returned false')
+          }
+        } catch (error) {
+          console.error('Failed to play note:', error)
+        }
 
         // Update pressed keys
         setPressedKeys(prev => new Set(prev).add(key))

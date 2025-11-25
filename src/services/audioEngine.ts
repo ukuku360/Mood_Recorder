@@ -195,10 +195,10 @@ class AudioEngine {
     return chordNotes
   }
 
-  async playNote(note: string, duration: string = '8n') {
+  async playNote(note: string, duration: string = '8n'): Promise<boolean> {
     if (!this.synth || !this.initialized) {
       console.warn('Audio engine not initialized')
-      return
+      return false
     }
 
     // Ensure AudioContext is running before playing
@@ -210,7 +210,7 @@ class AudioEngine {
         console.log('AudioContext resumed successfully, state:', Tone.context.state)
       } catch (error) {
         console.error('Failed to resume AudioContext:', error)
-        return
+        return false
       }
     }
 
@@ -228,8 +228,10 @@ class AudioEngine {
         console.log('Playing chord:', chordNotes)
         this.synth.triggerAttackRelease(chordNotes, duration)
       }
+      return true
     } catch (error) {
       console.error('Error playing note:', error)
+      return false
     }
   }
 
